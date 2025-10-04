@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
 {
     public class EventTrackerController : ControllerBase
     {
+        [Authorize]
         public ActionResult GetEventVolontrees(int eventId)
         {
             return Ok();

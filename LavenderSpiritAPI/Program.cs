@@ -1,10 +1,11 @@
-
-using AutoMapper;
 using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Models;
 using LavenderSpiritAPI.Services;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer; 
+using Microsoft.IdentityModel.Tokens; 
+using System.Text; 
+using System; 
 namespace LavenderSpiritAPI
 {
     public class Program
@@ -17,6 +18,35 @@ namespace LavenderSpiritAPI
             builder.Services.AddDbContext<Data.AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
+            //authenticationSettings
+            var authenticationSettings = new AuthenticationSettings();
+            builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+            builder.Services.AddSingleton(authenticationSettings);
+
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authenticationSettings.JwtIssuer,
+                    ValidAudience = authenticationSettings.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero 
+                };
+            });
+
+
+
             builder.Services.AddControllers();
 
             // Add AutoMapper
@@ -28,6 +58,7 @@ namespace LavenderSpiritAPI
             });
 
             builder.Services.AddTransient<IVolunteerService, VolunteerService>();
+            builder.Services.AddScoped<LavenderSpiritAPI.Services.IEventService, LavenderSpiritAPI.Services.EventService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -44,6 +75,7 @@ namespace LavenderSpiritAPI
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
