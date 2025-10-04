@@ -26,25 +26,5 @@ namespace LavenderSpiritAPI.Controllers
             }
             return Ok(evnt);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromBody] DTOs.CreateEventDTO newEventDTO)
-        {
-            var newEvent = new Models.LavEvent
-            {
-                EventID = new Guid(),
-                EventName = newEventDTO.EventName,
-                DateTime = newEventDTO.StartDate,
-                CreationDate = DateTime.Now,
-                Description = "Description placeholder",
-                Status = "Scheduled",
-                Localization = "Localization placeholder",
-                OwnerID = 1 // Placeholder for OwnerID, should be set based on authenticated user
-            };
-            
-
-
-            return Ok();
-        }
     }
 }
