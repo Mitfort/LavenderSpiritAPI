@@ -81,6 +81,24 @@ namespace LavenderSpiritAPI.Services
                 .OrderByDescending(e => e.DateTime)
                 .ToListAsync();
         }
+        public async Task<Event?> EdytujEventAsync(int id, Event zaktualizowanyEvent, int organizatorId)
+        {
+            var istniejącyEvent = await _context.Events.FindAsync(id);
+            if (istniejącyEvent == null) return null;
+
+            if (istniejącyEvent.OrganizatorID != organizatorId)
+                throw new UnauthorizedAccessException("Nie możesz edytować tego wydarzenia.");
+
+            // aktualizacja pól
+            istniejącyEvent.EventName = zaktualizowanyEvent.EventName;
+            istniejącyEvent.Description = zaktualizowanyEvent.Description;
+            istniejącyEvent.DateTime = zaktualizowanyEvent.DateTime;
+            istniejącyEvent.Localization = zaktualizowanyEvent.Localization;
+
+            await _context.SaveChangesAsync();
+            return istniejącyEvent;
+        }
+
     }
 }
 //controler to eventow
