@@ -91,4 +91,3 @@ namespace LavenderSpiritAPI.Services
 }
 //controler to eventow
 //validacja czy ktos jest organizatorem czy moze usunac lub edytowac
-//
