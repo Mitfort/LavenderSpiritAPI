@@ -13,8 +13,6 @@ namespace LavenderSpiritAPI.Controllers
         {
             this._dbContext = dbContext;
         }
-
-        [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _dbContext.Users.FindAsync(id);
@@ -26,11 +24,19 @@ namespace LavenderSpiritAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] Models.User newUser)
+        public async Task<IActionResult> CreateUser([FromBody] DTOs.UserDTO newUserDTO)
         {
+            var newUser = new Models.User
+            {
+                RoleID = 0,
+                Email = newUserDTO.Email,
+                Password = newUserDTO.Password,
+                Username = newUserDTO.FirstName + " " + newUserDTO.LastName,
+            };
+
             _dbContext.Users.Add(newUser);
             await _dbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetUserById), new { id = newUser.UserID }, newUser);
+            return Ok();
         }
     }
 }

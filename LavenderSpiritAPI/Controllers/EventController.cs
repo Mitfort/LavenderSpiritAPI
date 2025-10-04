@@ -23,5 +23,12 @@ namespace LavenderSpiritAPI.Controllers
             }
             return Ok(evnt);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEvent([FromBody] DTOs.EventDTO newEventDTO)
+        {
+
+            return Ok();
+        }
     }
 }

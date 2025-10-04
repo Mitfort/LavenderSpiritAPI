@@ -5,7 +5,7 @@ namespace LavenderSpiritAPI.Models
 {
     public class Organization
     {
-        public Guid OrganizationID { get; set; }
+        public Guid OrganizationID { get; set; } = new Guid();
         [Required]
         public string Name { get; set; }
         public User Creator { get; set; }

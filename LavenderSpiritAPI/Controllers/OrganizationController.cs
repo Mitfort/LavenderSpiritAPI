@@ -24,5 +24,19 @@ namespace LavenderSpiritAPI.Controllers
             }
             return Ok(organization);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrganization([FromBody] DTOs.OrganizationDTO newOrganizationDTO)
+        {
+            var newOrganization = new Models.Organization
+            {
+                Name = newOrganizationDTO.OrganizationName,
+                CreationDate = DateTime.Now
+            };
+
+            _dbContext.Organizations.Add(newOrganization);
+            await _dbContext.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
