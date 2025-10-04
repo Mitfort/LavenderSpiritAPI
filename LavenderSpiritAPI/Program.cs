@@ -3,6 +3,7 @@ using AutoMapper;
 using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Models;
 using LavenderSpiritAPI.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LavenderSpiritAPI
@@ -31,6 +32,7 @@ namespace LavenderSpiritAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IPasswordHasher<Voluntree>, PasswordHasher<Voluntree>>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
