@@ -16,11 +16,22 @@ namespace LavenderSpiritAPI.Models
 
         [NotNull]
         public string PhotoPath { get; set; }
+
+        [NotNull]
+        public string Status { get; set; }
+
+        [NotNull]
+        public string Localization { get; set; }
+
+        public string AdditionalInformations { get; set; }
 #nullable enable
 
         public DateTime DateTime { get; set; }
         public DateTime CreationDate { get; set; }
 
 
+
+        public int OrganizatorID { get; set; }
+        // public virtual User Organizator;
     }
 }
