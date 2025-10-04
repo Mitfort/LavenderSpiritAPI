@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LavenderSpiritAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251004161100_Events")]
-    partial class Events
+    [Migration("20251004192204_QbusMigration")]
+    partial class QbusMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,24 @@ namespace LavenderSpiritAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("LavenderSpiritAPI.Models.EventUser", b =>
+                {
+                    b.Property<Guid>("VolunteerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("VolunteerId", "EventId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EventUsers");
+                });
 
             modelBuilder.Entity("LavenderSpiritAPI.Models.LavEvent", b =>
                 {
@@ -86,20 +104,44 @@ namespace LavenderSpiritAPI.Migrations
                     b.ToTable("Voluntrees");
                 });
 
+            modelBuilder.Entity("LavenderSpiritAPI.Models.EventUser", b =>
+                {
+                    b.HasOne("LavenderSpiritAPI.Models.LavEvent", "Event")
+                        .WithMany("EventUsers")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LavenderSpiritAPI.Models.Voluntree", "Voluntree")
+                        .WithMany("EventUsers")
+                        .HasForeignKey("VolunteerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Voluntree");
+                });
+
             modelBuilder.Entity("LavenderSpiritAPI.Models.LavEvent", b =>
                 {
                     b.HasOne("LavenderSpiritAPI.Models.Voluntree", "Owner")
-                        .WithMany("OwnedEvents")
+                        .WithMany()
                         .HasForeignKey("OwnerID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("LavenderSpiritAPI.Models.LavEvent", b =>
+                {
+                    b.Navigation("EventUsers");
+                });
+
             modelBuilder.Entity("LavenderSpiritAPI.Models.Voluntree", b =>
                 {
-                    b.Navigation("OwnedEvents");
+                    b.Navigation("EventUsers");
                 });
 #pragma warning restore 612, 618
         }

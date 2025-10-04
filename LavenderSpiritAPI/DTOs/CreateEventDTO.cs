@@ -5,7 +5,6 @@ namespace LavenderSpiritAPI.DTOs
     public class CreateEventDTO
     {
         [Required(ErrorMessage = "Nazwa eventu jest wymagana.")]
-        [EmailAddress(ErrorMessage = "Nieprawidłowy format adresu email.")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Nazwa eventu musi mieć od 3 do 100 znaków.")]
         public string EventName { get; set; }
 
@@ -17,7 +16,7 @@ namespace LavenderSpiritAPI.DTOs
         public string Localization { get; set; }
 
         [Required(ErrorMessage = "Data i czas eventu są wymagane.")] 
-        [FutureDate(ErrorMessage = "Data i czas eventu muszą być w przyszłości.")]
+       // [FutureDate(ErrorMessage = "Data i czas eventu muszą być w przyszłości.")]
         public DateTime DateTime { get; set; }
     }
 

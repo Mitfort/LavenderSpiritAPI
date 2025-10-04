@@ -21,5 +21,7 @@ namespace LavenderSpiritAPI.Models
         // Owner ID
         public Guid OwnerID { get; set; }
         public virtual Voluntree Owner { get; set; }
+
+        public ICollection<EventUser> EventUsers { get; set; }
     }
 }

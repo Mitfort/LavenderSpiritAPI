@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LavenderSpiritAPI.Data;
 using LavenderSpiritAPI.DTOs;
+using LavenderSpiritAPI.Exceptions;
 using LavenderSpiritAPI.Models;
 
 namespace LavenderSpiritAPI.Services
@@ -33,11 +34,12 @@ namespace LavenderSpiritAPI.Services
         {
             var eventToDelete = dbContext.Events.FirstOrDefault(e => e.EventID == eventId);
 
-            if (eventToDelete != null)
-                throw new Exception(); // Utworzyc nowy exception
+            if (eventToDelete is null)
+                throw new EventNotFoundException($"Event nie istnieje.");
 
-            if(eventToDelete.OwnerID != userId)
-                throw new Exception(); // Utrzowcy nowy wyjatek
+            if (eventToDelete.OwnerID != userId)
+                throw new UnauthorizedEventAccessException($"Użytkownik {userId} nie jest właścicielem tego wydarzenia.");
+
 
             dbContext.Events.Remove(eventToDelete);
             dbContext.SaveChanges();

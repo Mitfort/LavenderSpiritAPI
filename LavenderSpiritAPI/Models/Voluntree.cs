@@ -8,6 +8,6 @@
         public string LastName { get; set; }
         public string Password { get; set; }
 
-        public virtual ICollection<LavEvent> OwnedEvents { get; set; } = new List<LavEvent>();
+        public virtual ICollection<EventUser> EventUsers { get; set; }
     }
 }

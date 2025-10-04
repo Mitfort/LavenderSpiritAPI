@@ -3,8 +3,11 @@ using LavenderSpiritAPI.Data;
 using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace LavenderSpiritAPI.Services
 {
@@ -12,11 +15,13 @@ namespace LavenderSpiritAPI.Services
     {
         private readonly AppDbContext _dbContext;
         private readonly IMapper mapper;
+        private readonly IPasswordHasher<Voluntree> _passwordHasher;
 
-        public VolunteerService(AppDbContext dbContext, IMapper _mapper)
+        public VolunteerService(AppDbContext dbContext, IMapper _mapper, IPasswordHasher<Voluntree> passwordHasher)
         {
             _dbContext = dbContext;
             mapper = _mapper;
+            _passwordHasher = passwordHasher;
         }
 
         public bool IsEmailInDB(string email)
@@ -30,11 +35,23 @@ namespace LavenderSpiritAPI.Services
         public Guid CreateVolunteer(CreateVolunteerDTO dTO)
         {
             Voluntree newVoluntree = mapper.Map<Voluntree>(dTO);
-            newVoluntree.VoluntreeID = new Guid();
+            newVoluntree.VoluntreeID = Guid.NewGuid();
+
+            newVoluntree.Password = _passwordHasher.HashPassword(newVoluntree, dTO.Password);
 
             _dbContext.Voluntrees.Add(newVoluntree);
             _dbContext.SaveChanges();
             return newVoluntree.VoluntreeID;
+        }
+
+        public Voluntree? Login(LoginDTO loginDTO)
+        {
+            var user = _dbContext.Voluntrees
+                .FirstOrDefault(u => u.Email == loginDTO.Email);
+            if (user == null) return null;
+            var result = _passwordHasher.VerifyHashedPassword(user,user.Password, loginDTO.Password);
+            if (result == PasswordVerificationResult.Success) return user;
+            return null;
         }
     }
 }

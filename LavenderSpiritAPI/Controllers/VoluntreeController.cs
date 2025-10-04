@@ -8,24 +8,33 @@ namespace LavenderSpiritAPI.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class VoluntreeController: ControllerBase
+    public class VoluntreeController : ControllerBase
     {
         private readonly IVolunteerService _volunteerService;
-        public VoluntreeController(IVolunteerService volunteerService) 
-        { 
+        public VoluntreeController(IVolunteerService volunteerService)
+        {
             _volunteerService = volunteerService;
         }
 
-
-        // TO DO:
-        //  Weryfikacja czy dane są poprawne
-        [HttpPost]
-        public IActionResult CreateVoluntre([FromBody]CreateVolunteerDTO dTO)
+        [HttpPost("register")]
+        public IActionResult CreateVoluntre([FromBody] CreateVolunteerDTO dTO)
         {
             if (_volunteerService.IsEmailInDB(dTO.Email))
                 return BadRequest();
 
             _volunteerService.CreateVolunteer(dTO);
+
+            return Ok();
+        }
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginDTO dto)
+        {
+            var user = _volunteerService.Login(dto);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             return Ok();
         }
     }
