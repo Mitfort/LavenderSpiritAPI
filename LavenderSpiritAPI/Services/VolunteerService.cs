@@ -19,7 +19,15 @@ namespace LavenderSpiritAPI.Services
             mapper = _mapper;
         }
 
-        public Guid CreateVolunteer(CreateVoluntreeDTO dTO)
+        public bool IsEmailInDB(string email)
+        {
+            var v = _dbContext.Voluntrees.FirstOrDefault(v => v.Email == email);
+            if (!(v is null))
+                return true;
+            return false;
+        }
+
+        public Guid CreateVolunteer(CreateVolunteerDTO dTO)
         {
             Voluntree newVoluntree = mapper.Map<Voluntree>(dTO);
             newVoluntree.VoluntreeID = new Guid();

@@ -22,7 +22,8 @@ namespace LavenderSpiritAPI
             // Add AutoMapper
             builder.Services.AddAutoMapper(cfg => 
             {
-                cfg.CreateMap<CreateVoluntreeDTO, Voluntree>();
+                cfg.CreateMap<CreateVolunteerDTO, Voluntree>();
+                cfg.CreateMap<CreateEventDTO, LavEvent>();
             });
 
             builder.Services.AddTransient<IVolunteerService, VolunteerService>();

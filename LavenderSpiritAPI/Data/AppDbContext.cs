@@ -9,7 +9,7 @@ namespace LavenderSpiritAPI.Data
         }
         // Define DbSets for your entities
         public DbSet<Models.Voluntree> Voluntrees { get; set; }
-        public DbSet<Models.Event> Events { get; set; }
+        public DbSet<Models.LavEvent> Events { get; set; }
         //public DbSet<Models.Organizator> Organizators { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

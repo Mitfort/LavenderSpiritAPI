@@ -14,9 +14,15 @@ namespace LavenderSpiritAPI.Controllers
             _volunteerService = volunteerService;
         }
 
+
+        // TO DO:
+        //  Weryfikacja czy dane są poprawne
         [HttpPost]
-        public IActionResult CreateVoluntre([FromBody]CreateVoluntreeDTO dTO)
+        public IActionResult CreateVoluntre([FromBody]CreateVolunteerDTO dTO)
         {
+            if (_volunteerService.IsEmailInDB(dTO.Email))
+                return BadRequest();
+
             _volunteerService.CreateVolunteer(dTO);
             return Ok();
         }

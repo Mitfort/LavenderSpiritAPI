@@ -2,13 +2,12 @@
 
 namespace LavenderSpiritAPI.Models
 {
-    public class Event
+    public class LavEvent
     {
         public Guid EventID { get; set; }
 
         public string EventName { get; set; }
         public string Description { get; set; }
-        public string Status { get; set; }
         public string Localization { get; set; }
 
 
@@ -18,7 +17,7 @@ namespace LavenderSpiritAPI.Models
 
 
         // Owner ID
-        public int OwnerID { get; set; }
+        public Guid OwnerID { get; set; }
         public virtual Voluntree Owner { get; set; }
     }
 }

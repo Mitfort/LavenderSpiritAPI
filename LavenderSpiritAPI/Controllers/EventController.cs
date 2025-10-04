@@ -28,9 +28,9 @@ namespace LavenderSpiritAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromBody] DTOs.EventDTO newEventDTO)
+        public async Task<IActionResult> CreateEvent([FromBody] DTOs.CreateEventDTO newEventDTO)
         {
-            var newEvent = new Models.Event
+            var newEvent = new Models.LavEvent
             {
                 EventID = new Guid(),
                 EventName = newEventDTO.EventName,
