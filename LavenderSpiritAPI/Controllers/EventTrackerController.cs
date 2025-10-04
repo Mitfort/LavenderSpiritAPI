@@ -18,7 +18,7 @@ namespace LavenderSpiritAPI.Controllers
         [HttpPost("{userId}/{eventId}")]
         public ActionResult SubscribeEvent(Guid userId, Guid eventId)
         {
-            if(!eventTrackerService.IsUserSubscribeEvent(userId,eventId))
+            if(eventTrackerService.IsUserSubscribeEvent(userId,eventId))
                 return BadRequest(); // Add sth
 
             eventTrackerService.SubscribeEvent(userId,eventId);

@@ -11,9 +11,10 @@ namespace LavenderSpiritAPI.Services
         private readonly AppDbContext dbContext;
         private readonly IMapper mapper;
 
-        public EventTrackerService(AppDbContext _dbContext) 
+        public EventTrackerService(AppDbContext _dbContext, IMapper _mapper) 
         {
             dbContext = _dbContext;
+            mapper = _mapper;
         }
 
         public bool IsUserSubscribeEvent(Guid userId, Guid evenId)
@@ -21,9 +22,9 @@ namespace LavenderSpiritAPI.Services
             var userEventD = dbContext.EventUsers
                 .FirstOrDefault(eu => eu.VolunteerId == userId && eu.EventId == evenId);
 
-            if (!(userEventD is null))
-                return true;
-            return false; // Becouse user do not subscribe
+            if (userEventD is null)
+                return false; // Becouse user do not subscribe
+             return true;
         }
 
         public void SubscribeEvent(Guid userId, Guid eventId)
