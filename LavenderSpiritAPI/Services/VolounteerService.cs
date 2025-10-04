@@ -14,12 +14,11 @@ namespace LavenderSpiritAPI.Services
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> CrateEvent(Models.Event newEvent)
+        public async void CrateEvent(Models.Event newEvent)
         {
             // Implementation for creating an event
             _dbContext.Events.Add(newEvent);
             await _dbContext.SaveChangesAsync();
-            return Ok();
         }
     }
 }
