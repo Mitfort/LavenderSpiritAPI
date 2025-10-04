@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class EventTrackerController : ControllerBase
     {
         private readonly IEventTrackerService eventTrackerService;
@@ -18,7 +20,7 @@ namespace LavenderSpiritAPI.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPost("{userId}/{eventId}")]
         public ActionResult SubscribeEvent(Guid userId, Guid eventId)
         {
             if(!eventTrackerService.IsUserSubscribeEvent(userId,eventId))
@@ -28,7 +30,7 @@ namespace LavenderSpiritAPI.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{userId}/{eventId}")]
         public ActionResult UnSubscribeEvent(Guid userId, Guid eventId)
         {
             if(eventTrackerService.IsUserSubscribeEvent(userId, eventId))
@@ -38,7 +40,7 @@ namespace LavenderSpiritAPI.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("{userId}")]
         public ActionResult<IEnumerable<GetEventDTO>> GetUsersEvents(Guid userId)
         {
             return Ok(eventTrackerService.GetUsersEvents(userId));
