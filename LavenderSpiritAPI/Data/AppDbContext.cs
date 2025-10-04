@@ -12,6 +12,7 @@ namespace LavenderSpiritAPI.Data
         public DbSet<Models.Voluntree> Voluntrees { get; set; }
         public DbSet<Models.LavEvent> Events { get; set; }
         public DbSet<Models.EventUser> EventUsers { get; set; }
+        public DbSet<Models.Organization> Organizations { get; set; }
         //public DbSet<Models.Organizator> Organizators { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,7 +21,7 @@ namespace LavenderSpiritAPI.Data
             // Configure entity relationships and constraints here if needed
 
             modelBuilder.Entity<Models.Voluntree>()
-        .HasKey(v => v.VoluntreeID);
+                .HasKey(v => v.VoluntreeID);
 
             modelBuilder.Entity<Models.LavEvent>()
                 .HasKey(e => e.EventID);
@@ -45,6 +46,9 @@ namespace LavenderSpiritAPI.Data
                 .HasOne(eu => eu.Event)
                 .WithMany(e => e.EventUsers)
                 .HasForeignKey(eu => eu.EventId);
+
+            modelBuilder.Entity<Models.Organization>()
+                .HasKey(o => o.OrganizationID);
 
         }
     }
