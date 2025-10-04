@@ -21,9 +21,9 @@ namespace LavenderSpiritAPI.Services
             var userEventD = dbContext.EventUsers
                 .FirstOrDefault(eu => eu.VolunteerId == userId && eu.EventId == evenId);
 
-            if (!(userEventD is null))
-                return true;
-            return false; // Becouse user do not subscribe
+            if ((userEventD is null))
+                return false;
+            return true; // Becouse user do not subscribe
         }
 
         public void SubscribeEvent(Guid userId, Guid eventId)
