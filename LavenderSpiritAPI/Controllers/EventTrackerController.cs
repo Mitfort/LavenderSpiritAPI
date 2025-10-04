@@ -19,19 +19,20 @@ namespace LavenderSpiritAPI.Controllers
         public ActionResult SubscribeEvent(Guid userId, Guid eventId)
         {
             if(eventTrackerService.IsUserSubscribeEvent(userId,eventId))
-                return BadRequest("Blad przy subscribe event");
+                return BadRequest("Użytkownik jest już zapisany na to wydarzenie."); 
+
             eventTrackerService.SubscribeEvent(userId,eventId);
-            return Ok();
+            return Ok("Zapisano na wydarzenie.");
         }
 
         [HttpDelete("{userId}/{eventId}")]
         public ActionResult UnSubscribeEvent(Guid userId, Guid eventId)
         {
-            if(eventTrackerService.IsUserSubscribeEvent(userId, eventId))
-                return BadRequest(); // Add sth
+            if(!eventTrackerService.IsUserSubscribeEvent(userId, eventId))
+                return BadRequest("Użytkownik nie jest zapisany na to wydarzenie."); 
 
             eventTrackerService.UnSubscribeEvent(userId,eventId);
-            return Ok();
+            return Ok("Wypisano z wydarzenia.");
         }
 
         [HttpGet("{userId}")]
