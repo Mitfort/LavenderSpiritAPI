@@ -6,5 +6,7 @@ namespace LavenderSpiritAPI.Services
     {
         public Guid CreateEvent(Guid userId, CreateEventDTO dTO);
         public void DeleteEvent(Guid userId, Guid eventId);
+        public GetEventDTO GetEventById(Guid eventId);
+        public ICollection<GetEventDTO> GetEvents();
     }
 }

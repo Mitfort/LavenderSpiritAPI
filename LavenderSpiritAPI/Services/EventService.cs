@@ -42,5 +42,17 @@ namespace LavenderSpiritAPI.Services
             dbContext.Events.Remove(eventToDelete);
             dbContext.SaveChanges();
         }
+
+        public GetEventDTO GetEventById(Guid eventId)
+        {
+            var gEvent = dbContext.Events.FirstOrDefault(e => e.EventID == eventId);
+            return mapper.Map<GetEventDTO>(gEvent);
+        }
+
+        public ICollection<GetEventDTO> GetEvents ()
+        {
+            var gEvents = dbContext.Events.ToList();
+            return mapper.Map<ICollection<GetEventDTO>>(gEvents);
+        }
     }
 }

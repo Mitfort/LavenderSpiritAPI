@@ -24,6 +24,7 @@ namespace LavenderSpiritAPI
             {
                 cfg.CreateMap<CreateVolunteerDTO, Voluntree>();
                 cfg.CreateMap<CreateEventDTO, LavEvent>();
+                cfg.CreateMap<LavEvent, GetEventDTO>();
             });
 
             builder.Services.AddTransient<IVolunteerService, VolunteerService>();
