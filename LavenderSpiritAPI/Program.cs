@@ -3,6 +3,7 @@ using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Models;
 using LavenderSpiritAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LavenderSpiritAPI
 {
@@ -10,11 +11,15 @@ namespace LavenderSpiritAPI
     {
         public static void Main(string[] args)
         {
+            string[] conStr = {
+                "DefaultConnectionString",
+                "DefaultConnectionStringQbus"
+            };
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddDbContext<Data.AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString(conStr[1])));
 
             builder.Services.AddControllers();
 
@@ -24,6 +29,7 @@ namespace LavenderSpiritAPI
                 cfg.CreateMap<CreateVolunteerDTO, Voluntree>();
                 cfg.CreateMap<CreateEventDTO, LavEvent>();
                 cfg.CreateMap<LavEvent, GetEventDTO>();
+                //cfg.CreateMap<IEnumerable<LavEvent>, IEnumerable<GetEventDTO>>();
             });
 
             builder.Services.AddScoped<IVolunteerService, VolunteerService>();
