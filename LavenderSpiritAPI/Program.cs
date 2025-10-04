@@ -1,4 +1,3 @@
-
 using AutoMapper;
 using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Models;
@@ -28,6 +27,7 @@ namespace LavenderSpiritAPI
             });
 
             builder.Services.AddTransient<IVolunteerService, VolunteerService>();
+            builder.Services.AddScoped<LavenderSpiritAPI.Services.IEventService, LavenderSpiritAPI.Services.EventService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
