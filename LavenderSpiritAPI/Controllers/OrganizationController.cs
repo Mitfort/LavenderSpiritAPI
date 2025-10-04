@@ -1,4 +1,6 @@
 ﻿using LavenderSpiritAPI.DTOs;
+using LavenderSpiritAPI.Models;
+using LavenderSpiritAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
@@ -7,17 +9,23 @@ namespace LavenderSpiritAPI.Controllers
     [Route("[controller]")]
     public class OrganizationController : ControllerBase
     {
-        public OrganizationController()
+        private readonly OrganizationService _organizationService;
+        public OrganizationController(OrganizationService organizationService)
         {
-
+            _organizationService = organizationService;
         }
 
         [HttpPost]
-        public ActionResult CreateOrganization([FromBody] CreateOrganizationDTO organizationDTO)
+        public async Task<IActionResult> CreateOrganization([FromBody] CreateOrganizationDTO organizationDTO)
         {
-            //TODO : Organization Service
+            var result = await _organizationService.RegisterAsync(organizationDTO);
 
-            return Ok();
+            return result switch
+            {
+                RegistrationResult.Success => Ok(),
+                RegistrationResult.EmailAlreadyExists => Conflict("Email already exists."),
+                _ => BadRequest("Registration failed.")
+            };
         }
 
         [HttpGet]

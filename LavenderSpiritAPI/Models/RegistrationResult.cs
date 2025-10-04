@@ -1,4 +1,4 @@
-namespace LavenderSpiritAPI.Services
+namespace LavenderSpiritAPI.Models
 {
     public enum RegistrationResult
     {

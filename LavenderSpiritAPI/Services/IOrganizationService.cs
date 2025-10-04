@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using LavenderSpiritAPI.DTOs;
-using LavenderSpiritAPI.Services;
+using LavenderSpiritAPI.Models;
 
 namespace LavenderSpiritAPI.Services
 {

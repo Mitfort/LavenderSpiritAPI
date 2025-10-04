@@ -7,7 +7,6 @@
         public string Description { get; set; }
         public string Localization { get; set; }
 
-
         public DateTime DateTime { get; set; }
         public DateTime CreationDate { get; set; }
 
