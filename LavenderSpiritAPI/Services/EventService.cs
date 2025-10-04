@@ -28,27 +28,31 @@ namespace LavenderSpiritAPI.Services
             return nowyEvent;
         }
 
-        public async Task<Event?> EdytujEventAsync(int id, Event zaktualizowanyEvent)
+        public async Task<Event?> EdytujEventAsync(int id, Event zaktualizowanyEvent, int organizatorId)
         {
             var istniejącyEvent = await _context.Events.FindAsync(id);
             if (istniejącyEvent == null) return null;
 
+            if (istniejącyEvent.OrganizatorID != organizatorId)
+                throw new UnauthorizedAccessException("Nie możesz edytować tego wydarzenia.");
+
+            // aktualizacja pól
             istniejącyEvent.EventName = zaktualizowanyEvent.EventName;
             istniejącyEvent.Description = zaktualizowanyEvent.Description;
             istniejącyEvent.DateTime = zaktualizowanyEvent.DateTime;
             istniejącyEvent.Localization = zaktualizowanyEvent.Localization;
-            istniejącyEvent.OrganizatorID = zaktualizowanyEvent.OrganizatorID;
 
-            _context.Events.Update(istniejącyEvent);
             await _context.SaveChangesAsync();
-
             return istniejącyEvent;
         }
 
-        public async Task<bool> UsunEventAsync(int id)
+
+        public async Task<bool> UsunEventAsync(int id, int organizatorId)
         {
             var ev = await _context.Events.FindAsync(id);
             if (ev == null) return false;
+            if (ev.OrganizatorID != organizatorId)
+                throw new UnauthorizedAccessException("Nie możesz edytować tego wydarzenia.");
 
             _context.Events.Remove(ev);
             await _context.SaveChangesAsync();
@@ -81,23 +85,7 @@ namespace LavenderSpiritAPI.Services
                 .OrderByDescending(e => e.DateTime)
                 .ToListAsync();
         }
-        public async Task<Event?> EdytujEventAsync(int id, Event zaktualizowanyEvent, int organizatorId)
-        {
-            var istniejącyEvent = await _context.Events.FindAsync(id);
-            if (istniejącyEvent == null) return null;
 
-            if (istniejącyEvent.OrganizatorID != organizatorId)
-                throw new UnauthorizedAccessException("Nie możesz edytować tego wydarzenia.");
-
-            // aktualizacja pól
-            istniejącyEvent.EventName = zaktualizowanyEvent.EventName;
-            istniejącyEvent.Description = zaktualizowanyEvent.Description;
-            istniejącyEvent.DateTime = zaktualizowanyEvent.DateTime;
-            istniejącyEvent.Localization = zaktualizowanyEvent.Localization;
-
-            await _context.SaveChangesAsync();
-            return istniejącyEvent;
-        }
 
     }
 }
