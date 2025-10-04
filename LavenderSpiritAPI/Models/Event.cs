@@ -31,7 +31,7 @@ namespace LavenderSpiritAPI.Models
 
 
 
-        public int OrganizatorID { get; set; }
-        // public virtual User Organizator;
+        public int UserID { get; set; }
+        // public virtual User User;
     }
 }
