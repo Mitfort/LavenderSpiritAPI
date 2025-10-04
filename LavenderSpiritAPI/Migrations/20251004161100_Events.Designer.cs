@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LavenderSpiritAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251004144203_GeneralRework")]
-    partial class GeneralRework
+    [Migration("20251004161100_Events")]
+    partial class Events
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace LavenderSpiritAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LavenderSpiritAPI.Models.Event", b =>
+            modelBuilder.Entity("LavenderSpiritAPI.Models.LavEvent", b =>
                 {
                     b.Property<Guid>("EventID")
                         .ValueGeneratedOnAdd()
@@ -49,19 +49,12 @@ namespace LavenderSpiritAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerID")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("OwnerVoluntreeID")
+                    b.Property<Guid>("OwnerID")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EventID");
 
-                    b.HasIndex("OwnerVoluntreeID");
+                    b.HasIndex("OwnerID");
 
                     b.ToTable("Events");
                 });
@@ -93,15 +86,20 @@ namespace LavenderSpiritAPI.Migrations
                     b.ToTable("Voluntrees");
                 });
 
-            modelBuilder.Entity("LavenderSpiritAPI.Models.Event", b =>
+            modelBuilder.Entity("LavenderSpiritAPI.Models.LavEvent", b =>
                 {
                     b.HasOne("LavenderSpiritAPI.Models.Voluntree", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerVoluntreeID")
+                        .WithMany("OwnedEvents")
+                        .HasForeignKey("OwnerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("LavenderSpiritAPI.Models.Voluntree", b =>
+                {
+                    b.Navigation("OwnedEvents");
                 });
 #pragma warning restore 612, 618
         }

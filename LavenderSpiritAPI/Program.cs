@@ -1,4 +1,3 @@
-
 using AutoMapper;
 using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Models;
@@ -22,10 +21,13 @@ namespace LavenderSpiritAPI
             // Add AutoMapper
             builder.Services.AddAutoMapper(cfg => 
             {
-                cfg.CreateMap<CreateVoluntreeDTO, Voluntree>();
+                cfg.CreateMap<CreateVolunteerDTO, Voluntree>();
+                cfg.CreateMap<CreateEventDTO, LavEvent>();
+                cfg.CreateMap<LavEvent, GetEventDTO>();
             });
 
-            builder.Services.AddTransient<IVolunteerService, VolunteerService>();
+            builder.Services.AddScoped<IVolunteerService, VolunteerService>();
+            builder.Services.AddScoped<IEventTrackerService, EventTrackerService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

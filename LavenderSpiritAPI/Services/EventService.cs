@@ -1,93 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using LavenderSpiritAPI.Models;
+﻿using AutoMapper;
 using LavenderSpiritAPI.Data;
+using LavenderSpiritAPI.DTOs;
+using LavenderSpiritAPI.Models;
 
 namespace LavenderSpiritAPI.Services
 {
-    public class EventService
+    public class EventService : IEventService
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext dbContext;
+        private readonly IMapper mapper;
 
-        public EventService(AppDbContext context)
+        public EventService(AppDbContext _dbContext, IMapper _mapper)
         {
-            _context = context;
+            dbContext = _dbContext;
+            mapper = _mapper;
         }
 
-
-        public async Task<Event> DodajEventAsync(Event nowyEvent)
+        public Guid CreateEvent(Guid userId, CreateEventDTO dTO)
         {
-            nowyEvent.CreationDate = DateTime.UtcNow;
+            var newEvent = mapper.Map<LavEvent>(dTO);
+            newEvent.OwnerID = userId;
+            newEvent.CreationDate = DateTime.UtcNow;
+            newEvent.EventID = new Guid();
 
-            _context.Events.Add(nowyEvent);
-            await _context.SaveChangesAsync();
+            dbContext.Events.Add(newEvent);
+            dbContext.SaveChanges();
 
-            return nowyEvent;
+            return newEvent.EventID;
         }
 
-        public async Task<Event?> EdytujEventAsync(int id, Event zaktualizowanyEvent, int organizatorId)
+        public void DeleteEvent(Guid userId, Guid eventId)
         {
-            var istniejącyEvent = await _context.Events.FindAsync(id);
-            if (istniejącyEvent == null) return null;
+            var eventToDelete = dbContext.Events.FirstOrDefault(e => e.EventID == eventId);
 
-            if (istniejącyEvent.OrganizatorID != organizatorId)
-                throw new UnauthorizedAccessException("Nie możesz edytować tego wydarzenia.");
+            if (eventToDelete != null)
+                throw new Exception(); // Utworzyc nowy exception
 
-            // aktualizacja pól
-            istniejącyEvent.EventName = zaktualizowanyEvent.EventName;
-            istniejącyEvent.Description = zaktualizowanyEvent.Description;
-            istniejącyEvent.DateTime = zaktualizowanyEvent.DateTime;
-            istniejącyEvent.Localization = zaktualizowanyEvent.Localization;
+            if(eventToDelete.OwnerID != userId)
+                throw new Exception(); // Utrzowcy nowy wyjatek
 
-            await _context.SaveChangesAsync();
-            return istniejącyEvent;
+            dbContext.Events.Remove(eventToDelete);
+            dbContext.SaveChanges();
         }
 
-
-        public async Task<bool> UsunEventAsync(int id, int organizatorId)
+        public GetEventDTO GetEventById(Guid eventId)
         {
-            var ev = await _context.Events.FindAsync(id);
-            if (ev == null) return false;
-            if (ev.OrganizatorID != organizatorId)
-                throw new UnauthorizedAccessException("Nie możesz edytować tego wydarzenia.");
-
-            _context.Events.Remove(ev);
-            await _context.SaveChangesAsync();
-
-            return true;
+            var gEvent = dbContext.Events.FirstOrDefault(e => e.EventID == eventId);
+            return mapper.Map<GetEventDTO>(gEvent);
         }
 
-
-        public async Task<Event?> PobierzEventPoIdAsync(Guid id)
-        {//event po id
-            return await _context.Events
-                .Include(e => e.EventName)
-                .Include(e => e.OrganizatorID)
-                .FirstOrDefaultAsync(e => e.EventID == id);
-        }
-
-        public async Task<List<Event>> PobierzEventyPoIdOrganizacjiAsync(int organizacjaId)
+        public ICollection<GetEventDTO> GetEvents ()
         {
-            return await _context.Events
-                .Where(e => e.OrganizatorID == organizacjaId)
-                .Include(e => e.EventName) //eventname
-                .ToListAsync();
+            var gEvents = dbContext.Events.ToList();
+            return mapper.Map<ICollection<GetEventDTO>>(gEvents);
         }
-
-        public async Task<List<Event>> PobierzWszystkieEventyAsync()
-        {
-            return await _context.Events
-                .Include(e => e.EventName) //eventname
-                .Include(e => e.OrganizatorID)
-                .OrderByDescending(e => e.DateTime)
-                .ToListAsync();
-        }
-
-
     }
 }
-//controler to eventow
-//validacja czy ktos jest organizatorem czy moze usunac lub edytowac
