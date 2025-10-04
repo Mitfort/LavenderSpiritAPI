@@ -1,6 +1,6 @@
 ﻿namespace LavenderSpiritAPI.DTOs
 {
-    public class CreateVoluntreeDTO
+    public class CreateVolunteerDTO
     {
         public string Email { get; set; }
         public string FirstName { get; set; }
