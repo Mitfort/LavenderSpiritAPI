@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using LavenderSpiritAPI.Models;
 using LavenderSpiritAPI.Data;
 
-
-﻿namespace LavenderSpiritAPI.Services
+namespace LavenderSpiritAPI.Services
 {
     public class EventService
     {
@@ -84,4 +83,6 @@ using LavenderSpiritAPI.Data;
         }
     }
 }
-
+//controler to eventow
+//validacja czy ktos jest organizatorem czy moze usunac lub edytowac
+//
