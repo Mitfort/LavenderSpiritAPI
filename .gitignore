@@ -115,7 +115,7 @@ ipch/
 # Visual Studio profiler
 *.psess
 *.vsp
-*.vspx
+*.vspx  
 *.sap
 
 # Visual Studio Trace Files
