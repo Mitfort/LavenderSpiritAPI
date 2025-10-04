@@ -20,16 +20,32 @@ namespace LavenderSpiritAPI.Data
             // Configure entity relationships and constraints here if needed
 
             modelBuilder.Entity<Models.Voluntree>()
-                .HasKey(v => v.VoluntreeID);
+        .HasKey(v => v.VoluntreeID);
 
             modelBuilder.Entity<Models.LavEvent>()
                 .HasKey(e => e.EventID);
 
+            // Konfiguracja relacji właściciela eventu
             modelBuilder.Entity<Models.LavEvent>()
-                .HasOne(e => e.Owner);
-                //.WithMany(v => v.OwnedEvents)
-                //.HasForeignKey(e => e.OwnerID)
-                //.OnDelete(DeleteBehavior.Cascade);
+                .HasOne(e => e.Owner)
+                .WithMany()
+                .HasForeignKey(e => e.OwnerID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Konfiguracja relacji wiele-do-wielu przez EventUser
+            modelBuilder.Entity<Models.EventUser>()
+                .HasKey(eu => new { eu.VolunteerId, eu.EventId });
+
+            modelBuilder.Entity<Models.EventUser>()
+                .HasOne(eu => eu.Voluntree)
+                .WithMany(v => v.EventUsers)
+                .HasForeignKey(eu => eu.VolunteerId);
+
+            modelBuilder.Entity<Models.EventUser>()
+                .HasOne(eu => eu.Event)
+                .WithMany(e => e.EventUsers)
+                .HasForeignKey(eu => eu.EventId);
+
         }
     }
 }

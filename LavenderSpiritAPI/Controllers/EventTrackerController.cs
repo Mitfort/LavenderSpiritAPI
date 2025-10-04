@@ -15,7 +15,6 @@ namespace LavenderSpiritAPI.Controllers
             eventTrackerService = _eventTrackerService;
         }
 
-
         [HttpPost("{userId}/{eventId}")]
         public ActionResult SubscribeEvent(Guid userId, Guid eventId)
         {

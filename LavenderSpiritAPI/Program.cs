@@ -27,6 +27,7 @@ namespace LavenderSpiritAPI
             });
 
             builder.Services.AddScoped<IVolunteerService, VolunteerService>();
+            builder.Services.AddScoped<LavenderSpiritAPI.Services.IEventService, LavenderSpiritAPI.Services.EventService>();
             builder.Services.AddScoped<IEventTrackerService, EventTrackerService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

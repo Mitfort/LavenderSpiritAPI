@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LavenderSpiritAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Events : Migration
+    public partial class EventUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,6 +46,31 @@ namespace LavenderSpiritAPI.Migrations
                         column: x => x.OwnerID,
                         principalTable: "Voluntrees",
                         principalColumn: "VoluntreeID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventUsers",
+                columns: table => new
+                {
+                    VolunteerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JoinedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventUsers", x => new { x.VolunteerId, x.EventId });
+                    table.ForeignKey(
+                        name: "FK_EventUsers_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "EventID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EventUsers_Voluntrees_VolunteerId",
+                        column: x => x.VolunteerId,
+                        principalTable: "Voluntrees",
+                        principalColumn: "VoluntreeID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -53,11 +78,19 @@ namespace LavenderSpiritAPI.Migrations
                 name: "IX_Events_OwnerID",
                 table: "Events",
                 column: "OwnerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventUsers_EventId",
+                table: "EventUsers",
+                column: "EventId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "EventUsers");
+
             migrationBuilder.DropTable(
                 name: "Events");
 
