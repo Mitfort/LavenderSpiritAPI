@@ -1,22 +1,47 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LavenderSpiritAPI.DTOs;
+using LavenderSpiritAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
 {
     public class EventTrackerController : ControllerBase
     {
-        public ActionResult GetEventVolontrees(int eventId)
+        private readonly IEventTrackerService eventTrackerService;
+
+        public EventTrackerController(IEventTrackerService _eventTrackerService)
+        {
+            eventTrackerService = _eventTrackerService;
+        }
+
+        public ActionResult GetEventVolontrees()
         {
             return Ok();
         }
 
-        public ActionResult SubscribeEvent(int volontreeId, int eventId)
+        [HttpPost]
+        public ActionResult SubscribeEvent(Guid userId, Guid eventId)
         {
+            if(!eventTrackerService.IsUserSubscribeEvent(userId,eventId))
+                return BadRequest(); // Add sth
+
+            eventTrackerService.SubscribeEvent(userId,eventId);
             return Ok();
         }
 
-        public ActionResult UnSubscribeEvent(int volontreeId, int eventId)
+        [HttpDelete]
+        public ActionResult UnSubscribeEvent(Guid userId, Guid eventId)
         {
+            if(eventTrackerService.IsUserSubscribeEvent(userId, eventId))
+                return BadRequest(); // Add sth
+
+            eventTrackerService.UnSubscribeEvent(userId,eventId);
             return Ok();
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<GetEventDTO>> GetUsersEvents(Guid userId)
+        {
+            return Ok(eventTrackerService.GetUsersEvents(userId));
         }
     }
 }

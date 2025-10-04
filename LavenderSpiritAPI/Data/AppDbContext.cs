@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LavenderSpiritAPI.Data
 {
@@ -10,6 +11,7 @@ namespace LavenderSpiritAPI.Data
         // Define DbSets for your entities
         public DbSet<Models.Voluntree> Voluntrees { get; set; }
         public DbSet<Models.LavEvent> Events { get; set; }
+        public DbSet<Models.EventUser> EventUsers { get; set; }
         //public DbSet<Models.Organizator> Organizators { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
