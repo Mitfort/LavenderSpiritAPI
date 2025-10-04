@@ -1,4 +1,8 @@
-﻿using LavenderSpiritAPI.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using LavenderSpiritAPI.Models;
 using LavenderSpiritAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,43 +12,81 @@ namespace LavenderSpiritAPI.Controllers
     [Route("[controller]")]
     public class EventController : ControllerBase
     {
-        private readonly AppDbContext _dbContext;
-        private VolunteerService _volunteerService;
-        public EventController(AppDbContext dbContext)
+        private readonly EventService _eventService;
+
+        public EventController(EventService eventService)
         {
-            this._dbContext = dbContext;
-            this._volunteerService = new VolunteerService(dbContext, null);
+            _eventService = eventService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Event>>> GetAllEvents()
+        {
+            var events = await _eventService.PobierzWszystkieEventyAsync();
+            return Ok(events);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEventById(int id)
+        public async Task<ActionResult<Event>> GetEventById(Guid id)
         {
-            var evnt = await _dbContext.Events.FindAsync(id);
-            if (evnt == null)
-            {
-                return NotFound();
-            }
+            var ev = await _eventService.PobierzEventPoIdAsync(id);
+            if (ev == null)
+                return NotFound(new { message = "Event not found." });
+
+            return Ok(ev);
+        }
+
+        [HttpGet("organization/{organizationId}")]
+        public async Task<ActionResult<List<Event>>> GetEventsByOrganization(int organizationId)
+        {
+            var events = await _eventService.PobierzEventyPoIdOrganizacjiAsync(organizationId);
+            return Ok(events);
+        }
             return Ok(evnt);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromBody] DTOs.EventDTO newEventDTO)
+        public async Task<ActionResult<Event>> CreateEvent([FromBody] Event newEvent)
         {
-            var newEvent = new Models.Event
-            {
-                EventID = new Guid(),
-                EventName = newEventDTO.EventName,
-                DateTime = newEventDTO.StartDate,
-                CreationDate = DateTime.Now,
-                Description = "Description placeholder",
-                Status = "Scheduled",
-                Localization = "Localization placeholder",
-                OwnerID = 1 // Placeholder for OwnerID, should be set based on authenticated user
-            };
-            
+            if (newEvent == null)
+                return BadRequest(new { message = "Invalid event data." });
 
+            var created = await _eventService.DodajEventAsync(newEvent);
+            return CreatedAtAction(nameof(GetEventById), new { id = created.EventID }, created);
+        }
 
-            return Ok();
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Event>> UpdateEvent(int id, [FromBody] Event updatedEvent)
+        {
+            if (updatedEvent == null)
+                return BadRequest(new { message = "Invalid event data." });
+
+            if (updatedEvent.OrganizatorID != GetCurrentUserId())
+                return Forbid("You are not allowed to edit this event.");
+
+            var result = await _eventService.EdytujEventAsync(id, updatedEvent, GetCurrentUserId());
+            if (result == null)
+                return NotFound(new { message = "Event not found." });
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEvent(int id, [FromQuery] int organizerId)
+        {
+            if (organizerId != GetCurrentUserId())
+                return Forbid("You are not allowed to delete this event.");
+
+            var success = await _eventService.UsunEventAsync(id, organizerId);
+            if (!success)
+                return NotFound(new { message = "Event not found." });
+
+            return NoContent();
+        }
+
+        private int GetCurrentUserId()
+        {
+            return 1;
         }
     }
 }
