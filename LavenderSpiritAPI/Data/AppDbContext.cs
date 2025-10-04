@@ -10,7 +10,8 @@ namespace LavenderSpiritAPI.Data
         // Define DbSets for your entities
         public DbSet<Models.User> Users { get; set; }
         public DbSet<Models.Event> Events { get; set; }
-        public DbSet<Models.Organizator> Organizators { get; set; }
+        //public DbSet<Models.Organizator> Organizators { get; set; }
+        public DbSet<Models.Organization> Organizations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,7 +20,8 @@ namespace LavenderSpiritAPI.Data
 
             modelBuilder.Entity<Models.User>().HasIndex(p => p.UserID).IsUnique();
             modelBuilder.Entity<Models.Event>().HasIndex(p => p.EventID).IsUnique();
-            modelBuilder.Entity<Models.Organizator>().HasIndex(p => p.UserID).IsUnique();
+            //modelBuilder.Entity<Models.Organizator>().HasIndex(p => p.UserID).IsUnique();
+            modelBuilder.Entity<Models.Organization>().HasIndex(p => p.OrganizationID).IsUnique();
         }
     }
 }
