@@ -1,4 +1,8 @@
 
+using AutoMapper;
+using LavenderSpiritAPI.DTOs;
+using LavenderSpiritAPI.Models;
+using LavenderSpiritAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace LavenderSpiritAPI
@@ -14,6 +18,15 @@ namespace LavenderSpiritAPI
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
             builder.Services.AddControllers();
+
+            // Add AutoMapper
+            builder.Services.AddAutoMapper(cfg => 
+            {
+                cfg.CreateMap<CreateVoluntreeDTO, Voluntree>();
+            });
+
+            builder.Services.AddTransient<IVolunteerService, VolunteerService>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
