@@ -16,8 +16,9 @@ namespace LavenderSpiritAPI.DTOs
         [RegularExpression(@"^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!*@#$%^&+=]).*$",
             ErrorMessage = "Hasło musi mieć co najmniej 8 znaków i zawierać: cyfrę, małą i wielką literę oraz znak specjalny.")]
         public string Password { get; set; }
-    
-        public DateTime CreationDate { get; set; } = DateTime.Now;
+
+        [Required(ErrorMessage = "Miasto jest wymagane")]
+        public string City { get; set; }
         public string? Description { get; set; }
     }
 

@@ -26,7 +26,7 @@ namespace LavenderSpiritAPI.Controllers
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), 200)] 
         [ProducesResponseType(401)] 
-        public async Task<ActionResult> Login([FromBody] LoginDto dto)
+        public async Task<ActionResult> Login([FromBody] LoginDTO dto)
         {
             var user = await _context.Voluntrees
                 .FirstOrDefaultAsync(v => v.Email == dto.Email);
