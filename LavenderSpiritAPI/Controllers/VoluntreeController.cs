@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class VoluntreeController: ControllerBase
     {
         private readonly IVolunteerService _volunteerService;
