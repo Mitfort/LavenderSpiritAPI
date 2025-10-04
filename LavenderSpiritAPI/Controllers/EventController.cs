@@ -1,10 +1,12 @@
-﻿using LavenderSpiritAPI.Data;
+﻿using Microsoft.AspNetCore.Authorization;
+using LavenderSpiritAPI.Data;
 using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class EventController : ControllerBase

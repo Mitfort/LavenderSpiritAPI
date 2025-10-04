@@ -1,9 +1,12 @@
-using AutoMapper;
 using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Models;
 using LavenderSpiritAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer; 
+using Microsoft.IdentityModel.Tokens; 
+using System.Text; 
+using System; 
 using System.Data;
 
 namespace LavenderSpiritAPI
@@ -21,6 +24,35 @@ namespace LavenderSpiritAPI
             // Add services to the container.
             builder.Services.AddDbContext<Data.AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString(conStr[0])));
+
+            //authenticationSettings
+            var authenticationSettings = new AuthenticationSettings();
+            builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+            builder.Services.AddSingleton(authenticationSettings);
+
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authenticationSettings.JwtIssuer,
+                    ValidAudience = authenticationSettings.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero 
+                };
+            });
+
+
 
             builder.Services.AddControllers();
 
@@ -53,6 +85,7 @@ namespace LavenderSpiritAPI
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

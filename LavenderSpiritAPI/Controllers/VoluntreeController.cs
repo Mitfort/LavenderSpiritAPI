@@ -1,9 +1,11 @@
-﻿using LavenderSpiritAPI.DTOs;
+﻿using Microsoft.AspNetCore.Authorization;
+using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class VoluntreeController : ControllerBase

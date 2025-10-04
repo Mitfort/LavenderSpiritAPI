@@ -1,5 +1,6 @@
 ﻿using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
@@ -8,6 +9,8 @@ namespace LavenderSpiritAPI.Controllers
     [Route("[controller]")]
     public class EventTrackerController : ControllerBase
     {
+        [Authorize]
+        public ActionResult GetEventVolontrees(int eventId)
         private readonly IEventTrackerService eventTrackerService;
 
         public EventTrackerController(IEventTrackerService _eventTrackerService)
