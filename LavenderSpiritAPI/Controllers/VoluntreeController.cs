@@ -15,7 +15,7 @@ namespace LavenderSpiritAPI.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult CreateVoluntre([FromBody] CreateVoluntreeDTO dTO)
+        public IActionResult CreateVoluntre([FromBody] CreateVolunteerDTO dTO)
         {
             if (_volunteerService.IsEmailInDB(dTO.Email))
                 return BadRequest();
@@ -27,7 +27,7 @@ namespace LavenderSpiritAPI.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginDTO dto)
         {
-            var user = _volunteerService.Login(dto.Email, dto.Password);
+            var user = _volunteerService.Login(dto);
             if (user == null)
             {
                 return Unauthorized();

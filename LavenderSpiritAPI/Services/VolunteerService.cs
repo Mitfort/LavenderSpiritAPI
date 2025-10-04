@@ -44,12 +44,12 @@ namespace LavenderSpiritAPI.Services
             return newVoluntree.VoluntreeID;
         }
 
-        public Voluntree? Login(string email, string password)
+        public Voluntree? Login(LoginDTO loginDTO)
         {
             var user = _dbContext.Voluntrees
-                .FirstOrDefault(u => u.Email == email);
+                .FirstOrDefault(u => u.Email == loginDTO.Email);
             if (user == null) return null;
-            var result = _passwordHasher.VerifyHashedPassword(user,user.Password, password);
+            var result = _passwordHasher.VerifyHashedPassword(user,user.Password, loginDTO.Password);
             if (result == PasswordVerificationResult.Success) return user;
             return null;
         }

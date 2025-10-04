@@ -20,7 +20,7 @@ namespace LavenderSpiritAPI
 
             // Add services to the container.
             builder.Services.AddDbContext<Data.AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString(conStr[1])));
+                options.UseSqlServer(builder.Configuration.GetConnectionString(conStr[0])));
 
             builder.Services.AddControllers();
 
