@@ -105,7 +105,7 @@ Aplikacja domyślnie uruchomi się na `https://localhost:5001` lub `http://local
 
 ## Swagger / OpenAPI
 
-Po uruchomieniu aplikacji w trybie deweloperskim dokumentacja API dostępna jest pod `/swagger`.
+Po uruchomieniu aplikacji w trybie deweloperskim dokumentacja API dostępna jest pod `{localhost}/swagger`.
 
 ## Autorzy
 - [Maria Bludova](https://github.com/longlongint24)
