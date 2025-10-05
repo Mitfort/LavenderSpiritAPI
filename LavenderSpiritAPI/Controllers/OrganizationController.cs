@@ -20,6 +20,8 @@ namespace LavenderSpiritAPI.Controllers
         {
             var result = await _organizationService.RegisterAsync(organizationDTO);
 
+            Console.WriteLine(result);
+
             return result switch
             {
                 RegistrationResult.Success => Ok(),

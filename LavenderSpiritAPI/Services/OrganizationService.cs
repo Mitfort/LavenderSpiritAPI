@@ -43,17 +43,19 @@ namespace LavenderSpiritAPI.Services
                     OrgID = Guid.NewGuid(),
                     Name = registrationDto.Name,
                     Email = registrationDto.Email,
-                    Password = registrationDto.Password
+                    Password = registrationDto.Password,
+                    City = registrationDto.City,
+                    CreationDate = DateTime.Now,
+                    Description = registrationDto.Description,
                 };
 
-                _context.Set<Organization>().Add(organization);
+                await _context.Organizations.AddAsync(organization);
                 await _context.SaveChangesAsync();
 
                 return RegistrationResult.Success;
             }
             catch (Exception ex)
-            {
- 
+            { 
                 return RegistrationResult.Failure;
             }
         }
