@@ -1,9 +1,10 @@
+using LavenderSpiritAPI.DTOs;
 using LavenderSpiritAPI.Models;
 
 namespace LavenderSpiritAPI.Services
 {
     public interface IAuthService
     {
-        string GenerateJwt(Voluntree user);
+        public string Login(LoginDTO dto);
     }
 }

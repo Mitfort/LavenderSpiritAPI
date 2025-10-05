@@ -26,23 +26,9 @@ namespace LavenderSpiritAPI.Controllers
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), 200)] 
         [ProducesResponseType(401)] 
-        public async Task<ActionResult> Login([FromBody] LoginDTO dto)
+        public ActionResult<string> Login([FromBody] LoginDTO dto)
         {
-            var user = await _context.Voluntrees
-                .FirstOrDefaultAsync(v => v.Email == dto.Email);
-
-            if (user == null)
-            {
-                return Unauthorized(new { message = "Niepoprawny email lub has³o." });
-            }
-
-            if (user.Password != dto.Password)
-            {
-                return Unauthorized(new { message = "Niepoprawny email lub has³o." });
-            }
-
-            var token = _authService.GenerateJwt(user);
-
+            var token = _authService.Login(dto);
             return Ok(new { token = token });
         }
     }

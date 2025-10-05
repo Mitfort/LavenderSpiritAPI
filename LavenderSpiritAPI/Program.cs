@@ -32,8 +32,9 @@ namespace LavenderSpiritAPI
 
             builder.Services.AddAuthentication(opt =>
             {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultAuthenticateScheme = "Bearer";
+                opt.DefaultScheme = "Bearer";
+                opt.DefaultChallengeScheme = "Bearer";
             }).AddJwtBearer(cfg =>
             {
                 cfg.RequireHttpsMetadata = false;
@@ -87,10 +88,10 @@ namespace LavenderSpiritAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseHttpsRedirection();
 
 
             app.MapControllers();
