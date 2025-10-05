@@ -6,11 +6,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LavenderSpiritAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class EventUser : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Organizations",
+                columns: table => new
+                {
+                    OrgID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organizations", x => x.OrgID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Voluntrees",
                 columns: table => new
@@ -36,17 +53,23 @@ namespace LavenderSpiritAPI.Migrations
                     Localization = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OwnerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    OrgID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrganizationOrgID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.EventID);
                     table.ForeignKey(
-                        name: "FK_Events_Voluntrees_OwnerID",
-                        column: x => x.OwnerID,
-                        principalTable: "Voluntrees",
-                        principalColumn: "VoluntreeID",
+                        name: "FK_Events_Organizations_OrgID",
+                        column: x => x.OrgID,
+                        principalTable: "Organizations",
+                        principalColumn: "OrgID",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Events_Organizations_OrganizationOrgID",
+                        column: x => x.OrganizationOrgID,
+                        principalTable: "Organizations",
+                        principalColumn: "OrgID");
                 });
 
             migrationBuilder.CreateTable(
@@ -75,9 +98,14 @@ namespace LavenderSpiritAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_OwnerID",
+                name: "IX_Events_OrganizationOrgID",
                 table: "Events",
-                column: "OwnerID");
+                column: "OrganizationOrgID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_OrgID",
+                table: "Events",
+                column: "OrgID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventUsers_EventId",
@@ -96,6 +124,9 @@ namespace LavenderSpiritAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Voluntrees");
+
+            migrationBuilder.DropTable(
+                name: "Organizations");
         }
     }
 }

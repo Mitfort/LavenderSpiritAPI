@@ -9,8 +9,8 @@ namespace LavenderSpiritAPI.Controllers
     [Route("[controller]")]
     public class OrganizationController : ControllerBase
     {
-        private readonly OrganizationService _organizationService;
-        public OrganizationController(OrganizationService organizationService)
+        private readonly IOrganizationService _organizationService;
+        public OrganizationController(IOrganizationService organizationService)
         {
             _organizationService = organizationService;
         }
@@ -35,8 +35,8 @@ namespace LavenderSpiritAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("{organizationID}")]
-        public ActionResult GetOrganizationEvents(Guid organizationID)
+        [HttpGet("{OrgID}")]
+        public ActionResult GetOrganizationEvents(Guid OrgID)
         {
             //TODO : Organization Service
             return Ok();

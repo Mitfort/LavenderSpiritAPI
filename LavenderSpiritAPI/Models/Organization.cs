@@ -2,7 +2,7 @@
 {
     public class Organization
     {
-        public Guid OrganizationID { get; set; }
+        public Guid OrgID { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string City { get; set; }
@@ -10,6 +10,6 @@
         public DateTime CreationDate { get; set; }
         public string? Description { get; set; }
 
-        public virtual IEnumerable<LavEvent> HostedEvents { get; set; } = new List<LavEvent>();
+        public virtual IEnumerable<LavEvent> HostedEvents { get; set; }
     }
 }

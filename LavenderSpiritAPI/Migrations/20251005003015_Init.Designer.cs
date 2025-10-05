@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LavenderSpiritAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251004192204_QbusMigration")]
-    partial class QbusMigration
+    [Migration("20251005003015_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,14 +67,52 @@ namespace LavenderSpiritAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("OwnerID")
+                    b.Property<Guid>("OrgID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrganizationOrgID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("EventID");
 
-                    b.HasIndex("OwnerID");
+                    b.HasIndex("OrgID");
+
+                    b.HasIndex("OrganizationOrgID");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("LavenderSpiritAPI.Models.Organization", b =>
+                {
+                    b.Property<Guid>("OrgID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrgID");
+
+                    b.ToTable("Organizations");
                 });
 
             modelBuilder.Entity("LavenderSpiritAPI.Models.Voluntree", b =>
@@ -125,18 +163,27 @@ namespace LavenderSpiritAPI.Migrations
 
             modelBuilder.Entity("LavenderSpiritAPI.Models.LavEvent", b =>
                 {
-                    b.HasOne("LavenderSpiritAPI.Models.Voluntree", "Owner")
+                    b.HasOne("LavenderSpiritAPI.Models.Organization", "Org")
                         .WithMany()
-                        .HasForeignKey("OwnerID")
+                        .HasForeignKey("OrgID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.HasOne("LavenderSpiritAPI.Models.Organization", null)
+                        .WithMany("HostedEvents")
+                        .HasForeignKey("OrganizationOrgID");
+
+                    b.Navigation("Org");
                 });
 
             modelBuilder.Entity("LavenderSpiritAPI.Models.LavEvent", b =>
                 {
                     b.Navigation("EventUsers");
+                });
+
+            modelBuilder.Entity("LavenderSpiritAPI.Models.Organization", b =>
+                {
+                    b.Navigation("HostedEvents");
                 });
 
             modelBuilder.Entity("LavenderSpiritAPI.Models.Voluntree", b =>

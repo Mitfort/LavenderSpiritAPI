@@ -20,7 +20,7 @@ namespace LavenderSpiritAPI.Services
         public Guid CreateEvent(Guid userId, CreateEventDTO dTO)
         {
             var newEvent = mapper.Map<LavEvent>(dTO);
-            newEvent.OrganizationID = userId;
+            newEvent.OrgID = userId;
             newEvent.CreationDate = DateTime.UtcNow;
             newEvent.EventID = new Guid();
 
@@ -37,7 +37,7 @@ namespace LavenderSpiritAPI.Services
             if (eventToDelete is null)
                 throw new EventNotFoundException($"Event nie istnieje.");
 
-            if (eventToDelete.OrganizationID != userId)
+            if (eventToDelete.OrgID != userId)
                 throw new UnauthorizedEventAccessException($"Użytkownik {userId} nie jest właścicielem tego wydarzenia.");
 
 

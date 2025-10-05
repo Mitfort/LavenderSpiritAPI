@@ -19,8 +19,8 @@ namespace LavenderSpiritAPI.Models
 
 
         // Owner ID
-        public Guid OrganizationID { get; set; }
-        public virtual Organization Organization { get; set; }
+        public Guid OrgID { get; set; }
+        public virtual Organization Org { get; set; }
 
         public ICollection<EventUser> EventUsers { get; set; }
     }

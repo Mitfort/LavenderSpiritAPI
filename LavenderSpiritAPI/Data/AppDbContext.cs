@@ -28,9 +28,9 @@ namespace LavenderSpiritAPI.Data
 
             // Konfiguracja relacji właściciela eventu
             modelBuilder.Entity<Models.LavEvent>()
-                .HasOne(e => e.Organization)
+                .HasOne(e => e.Org)
                 .WithMany()
-                .HasForeignKey(e => e.OrganizationID)
+                .HasForeignKey(e => e.OrgID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Konfiguracja relacji wiele-do-wielu przez EventUser
@@ -48,7 +48,7 @@ namespace LavenderSpiritAPI.Data
                 .HasForeignKey(eu => eu.EventId);
 
             modelBuilder.Entity<Models.Organization>()
-                .HasKey(o => o.OrganizationID);
+                .HasKey(o => o.OrgID);
 
         }
     }

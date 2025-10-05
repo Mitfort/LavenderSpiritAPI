@@ -3,15 +3,16 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using LavenderSpiritAPI.Models;
 using LavenderSpiritAPI.DTOs;
+using LavenderSpiritAPI.Data;
 
 namespace LavenderSpiritAPI.Services
 {
     public class OrganizationService : IOrganizationService
     {
-        private readonly DbContext _context;
+        private readonly AppDbContext _context;
 
     
-        public OrganizationService(DbContext context)
+        public OrganizationService(AppDbContext context)
         {
             _context = context;
         }
@@ -39,7 +40,7 @@ namespace LavenderSpiritAPI.Services
             {
                 var organization = new Organization
                 {
-                    OrganizationID = Guid.NewGuid(),
+                    OrgID = Guid.NewGuid(),
                     Name = registrationDto.Name,
                     Email = registrationDto.Email,
                     Password = registrationDto.Password

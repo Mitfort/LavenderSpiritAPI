@@ -5,7 +5,7 @@
         public Guid EventID;
         public LavEvent Event;
 
-        public Guid OrganizationID;
+        public Guid OrgID;
         public Organization Organization;
     }
 }
