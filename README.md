@@ -77,6 +77,9 @@ Aplikacja domyślnie uruchomi się na `https://localhost:5001` lub `http://local
 
 ## Przykładowe endpointy
 
+<img width="1042" height="868" alt="image" src="https://github.com/user-attachments/assets/f39fcb2a-edd7-4b8e-ac29-6366aec8e812" />
+
+
 ### Organizacje
 
 - `POST /Organization` – rejestracja organizacji
