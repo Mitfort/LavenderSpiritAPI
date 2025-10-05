@@ -14,18 +14,14 @@ namespace LavenderSpiritAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IAuthService _authService;
 
-        public AuthController(AppDbContext context, IAuthService authService)
+        public AuthController(IAuthService authService)
         {
-            _context = context;
             _authService = authService;
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(string), 200)] 
-        [ProducesResponseType(401)] 
         public ActionResult<string> Login([FromBody] LoginDTO dto)
         {
             var token = _authService.Login(dto);

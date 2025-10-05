@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LavenderSpiritAPI.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class VoluntreeController : ControllerBase
@@ -17,23 +16,12 @@ namespace LavenderSpiritAPI.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult CreateVoluntre([FromBody] CreateVolunteerDTO dTO)
+        public IActionResult RegisterVolunteer([FromBody] CreateVolunteerDTO dTO)
         {
             if (_volunteerService.IsEmailInDB(dTO.Email))
                 return BadRequest();
 
-            _volunteerService.CreateVolunteer(dTO);
-
-            return Ok();
-        }
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginDTO dto)
-        {
-            var user = _volunteerService.Login(dto);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+            _volunteerService.RegisterVolunteer(dTO);
 
             return Ok();
         }

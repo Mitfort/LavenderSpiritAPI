@@ -32,7 +32,7 @@ namespace LavenderSpiritAPI.Services
             return false;
         }
 
-        public Guid CreateVolunteer(CreateVolunteerDTO dTO)
+        public Guid RegisterVolunteer(CreateVolunteerDTO dTO)
         {
             Voluntree newVoluntree = mapper.Map<Voluntree>(dTO);
             newVoluntree.VoluntreeID = Guid.NewGuid();
@@ -42,16 +42,6 @@ namespace LavenderSpiritAPI.Services
             _dbContext.Voluntrees.Add(newVoluntree);
             _dbContext.SaveChanges();
             return newVoluntree.VoluntreeID;
-        }
-
-        public Voluntree? Login(LoginDTO loginDTO)
-        {
-            var user = _dbContext.Voluntrees
-                .FirstOrDefault(u => u.Email == loginDTO.Email);
-            if (user == null) return null;
-            var result = _passwordHasher.VerifyHashedPassword(user,user.Password, loginDTO.Password);
-            if (result == PasswordVerificationResult.Success) return user;
-            return null;
         }
     }
 }

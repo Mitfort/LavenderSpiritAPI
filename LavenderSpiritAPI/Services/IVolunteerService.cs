@@ -6,7 +6,6 @@ namespace LavenderSpiritAPI.Services
     public interface IVolunteerService
     {
         public bool IsEmailInDB(string email);
-        public Guid CreateVolunteer(CreateVolunteerDTO dTO);
-        public Voluntree? Login(LoginDTO dTO);
+        public Guid RegisterVolunteer(CreateVolunteerDTO dTO);
     }
 }
